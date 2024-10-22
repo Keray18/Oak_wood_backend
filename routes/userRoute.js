@@ -1,21 +1,27 @@
 const express = require('express')
 const { 
-    getUserById,
-    getUsers,
-    createUser,
-    updateUser,
-    deleteUser
+    registerUser,
+    loginUser,
+    getProtectedData
+ } = require('../controllers/User.js')
 
- } = require('../controllers/User')
+const {
+    authenticateToken,
+    authorizeRole
+} = require('../middleware/authMiddleware.js')
 
 
 const router = express.Router()
 
-router.get('/users', getUsers)
-router.get('/users/:id', getUserById)
-router.post('/users', createUser)
-router.patch('/users/:id', updateUser)
-router.delete('/users/:id', deleteUser)
+router.post('/register', registerUser)
+router.post('/login', loginUser)
+router.get('/protected', authenticateToken, getProtectedData)
+router.get('/admin', authenticateToken, authorizeRole('admin'), (req, res) => {
+    res.status(200).json({ message: "Welceom Admin!" })
+})
+
+
+// router.delete('/users/:id', deleteUser)
 
 
 module.exports = router

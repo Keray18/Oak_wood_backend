@@ -1,19 +1,15 @@
-const { Sequelize } = require('sequelize')
-const db = require('../config/Database.js')
-
-const { DataTypes } = Sequelize
-
+const { Sequelize } = require('sequelize');
+const db = require('../config/Database.js');
+const { DataTypes } = Sequelize;
 
 const Users = db.define('users', {
     uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false,
-        validate: {
-            notEmpty: true
-        }
-    }, 
-    Name: {
+        primaryKey: true,
+    },
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -21,30 +17,32 @@ const Users = db.define('users', {
             len: [3, 100]
         }
     },
-    Email: {
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,  
         validate: {
             notEmpty: true,
             isEmail: true
         }
     },
-    Password: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
             notEmpty: true,
         }
     },
-    Role: {
+    role: {
         type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: 'user',  
         validate: {
             notEmpty: true,
         }
     }
 }, {
     freezeTableName: true
-})
+});
 
-module.exports = Users
+module.exports = Users;
