@@ -8,10 +8,11 @@ const registerUser = async(req, res) => {
     const { name, email, password, role } = req.body
 
     try {
-        const hashedPass = bcrypt.hash(password, 10)
+        const salt = await bcrypt.genSalt(10)
+        const hashedPass = await bcrypt.hash(password, salt)
 
-        const newUser = await Users.create({ name, email, hashedPass, role })
-        if(!newUser) return res.status() 
+        const newUser = await Users.create({ name, email, password: hashedPass, role })
+        if(!newUser) return res.status(400).json({ message: "Error Creating a user" }) 
 
         res.status(201).json({ message: "User registered successfully!", user: newUser })
 
@@ -24,9 +25,9 @@ const loginUser = async(req, res) => {
     const { email, password } = req.body
 
     try {
-        const user = await req.body.findOne({ where: email })
+        const user = await Users.findOne({ where: { email } })
         if(!user) return res.status(404).json({ message: "user not found" })
-
+        
         const match = await bcrypt.compare(password, user.password)
         if(!match) return res.status(401).json({ message: "invalid credentials" })
 

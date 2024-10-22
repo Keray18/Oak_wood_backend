@@ -8,7 +8,7 @@ const db = require('./config/Database.js')
 dotenv.config()
 const app = express()
 
-(async () => {
+;(async () => {
     try {
         await db.sync();
         console.log('Database synchronized successfully.');

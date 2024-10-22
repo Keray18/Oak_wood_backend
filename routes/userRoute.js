@@ -15,9 +15,10 @@ const router = express.Router()
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)
+
 router.get('/protected', authenticateToken, getProtectedData)
 router.get('/admin', authenticateToken, authorizeRole('admin'), (req, res) => {
-    res.status(200).json({ message: "Welceom Admin!" })
+    res.status(200).json({ message: "Welcome Admin!" })
 })
 
 
