@@ -2,13 +2,18 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const session = require('express-session')
+const multer = require('multer')
 const userRoute = require('./routes/userRoute.js')
 const db = require('./config/Database.js')
 
 dotenv.config()
 const app = express()
+const upload = multer()
 
-;(async () => {
+app.use(express.json())
+app.use(upload.none());
+
+(async () => {
     try {
         await db.sync();
         console.log('Database synchronized successfully.');
@@ -31,9 +36,13 @@ app.use(session({
     }
 }))
 
+// app.use((req, res, next) => {
+//     console.log('Request Headers:', req.headers);
+//     console.log('Request Body:', req.body);
+//     next();
+// });
 
 
-app.use(express.json())
 app.use(userRoute)
 
 

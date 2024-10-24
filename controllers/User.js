@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 
 const registerUser = async(req, res) => {
     const { name, email, password, role } = req.body
+    // console.log("request body", req.body)
 
     try {
         const salt = await bcrypt.genSalt(10)
@@ -36,6 +37,7 @@ const loginUser = async(req, res) => {
             process.env.JWT_SEC,
             {expiresIn: "7d"}
         )
+        // console.log("Token: ", token)
         res.status(200).json({ message: "Login Successful", token})
 
     } catch(error) {
